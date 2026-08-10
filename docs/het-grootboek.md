@@ -33,8 +33,8 @@ Daarom draagt elke boeking twee datums:
 }
 ```
 
-Het verschil tussen die twee ís het bewijs. `geregistreerd_op` wordt door het
-gereedschap gezet en kan niet worden meegegeven — anders zou het geen bewijs meer
+Het verschil tussen die twee ís het bewijs. `geregistreerd_op` wordt door de
+tool gezet en kan niet worden meegegeven — anders zou het geen bewijs meer
 zijn, maar een invoerveld.
 
 `/wbso:check` rekent per boeking het aantal werkdagen uit en meldt overschrijding.
@@ -79,4 +79,4 @@ gebeurt. De hook kan het grootboek niet bereiken, en dat is met een test
 vastgelegd.
 
 Zie [ADR-01](adr/ADR-01-registratie-integriteit.md) en
-[ADR-02](adr/ADR-02-machine-stelt-voor.md) voor de volledige afweging.
+[ADR-02](adr/ADR-02-tool-stelt-voor.md) voor de volledige afweging.

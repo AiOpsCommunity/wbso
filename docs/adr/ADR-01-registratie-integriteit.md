@@ -36,7 +36,7 @@ volgt de regeling — een S&O-verklaring loopt nooit over de jaargrens.
 
 ## Afgewogen alternatieven
 
-- **CSV die je bijwerkt** (de eerste versie van dit gereedschap). Leesbaar en
+- **CSV die je bijwerkt** (de eerste versie van deze tool). Leesbaar en
   bewerkbaar in een spreadsheet, maar biedt geen enkele waarborg over het moment
   van vastleggen. Afgewezen op de kernvraag.
 - **SQLite.** Betere queries, maar een binair bestand diff't niet in git en is

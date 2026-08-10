@@ -1,4 +1,4 @@
-# ADR-02 — De machine stelt voor, de mens verklaart
+# ADR-02 — De tool stelt voor, de gebruiker verklaart
 
 - **Status:** Geaccepteerd (10 augustus 2026)
 - **Beslisser:** Jacky
@@ -26,14 +26,14 @@ en de gebruiker merkt dat pas op het slechtst denkbare moment.
 
 ## Beslissing
 
-De machine mag **uitsluitend een concept voorstellen** dat de gebruiker bevestigt
+De tool mag **uitsluitend een concept voorstellen** dat de gebruiker bevestigt
 of corrigeert. Er is geen pad waarlangs een boeking in het grootboek komt zonder
 menselijke bevestiging.
 
 Dit wordt structureel afgedwongen, niet met een waarschuwing in de documentatie:
 
 1. **Waarnemingen en claims staan in gescheiden bestanden.**
-   `sessies-<jaar>.jsonl` bevat wat de machine zag. `uren-<jaar>.jsonl` bevat wat
+   `sessies-<jaar>.jsonl` bevat wat de tool zag. `uren-<jaar>.jsonl` bevat wat
    de gebruiker heeft verklaard. De hook schrijft nooit in het grootboek.
 2. **De hook is opt-in** (`capture.sessies`) en staat standaard uit.
 3. **`/wbso:dag` presenteert de voorgestelde uren expliciet als startpunt**, met

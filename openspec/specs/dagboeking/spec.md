@@ -2,7 +2,7 @@
 
 ## Purpose
 
-De dagelijkse handeling waarmee uren in het grootboek komen. De machine stelt voor op
+De dagelijkse handeling waarmee uren in het grootboek komen. De tool stelt voor op
 basis van de commits van die dag; de gebruiker bevestigt of corrigeert.
 
 Er is geen pad waarlangs een boeking zonder bevestiging wordt vastgelegd. Sessieduur

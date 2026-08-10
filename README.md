@@ -1,5 +1,7 @@
 # wbso
 
+<img src="docs/promo.png" alt="wbso — S&amp;O-uren bijhouden waar je ze maakt. De tool stelt voor, jij verklaart." width="100%">
+
 Een Claude Code-plugin voor het bijhouden van S&O-uren voor de **WBSO** (Wet
 Bevordering Speur- en Ontwikkelingswerk).
 
@@ -40,7 +42,7 @@ Vereist Node 20 of nieuwer. Verder geen afhankelijkheden.
 
 ## Het ontwerpprincipe
 
-**De machine stelt voor, jij verklaart.**
+**De tool stelt voor, jij verklaart.**
 
 Uren worden nooit automatisch geboekt. Sessieduur is geen S&O-tijd: hij bevat
 pauzes, bevat werk dat niet kwalificeert, en mist het denkwerk dat buiten de
@@ -60,6 +62,13 @@ corrigeert. Verder:
 
 Zie [Het grootboek](docs/het-grootboek.md) voor hoe dat er in de praktijk
 uitziet, en de [architectuurbesluiten](docs/adr/) voor de afwegingen.
+
+<details>
+<summary><b>Alles in één beeld</b> — werkstroom, ontwerpprincipe en grootboek</summary>
+
+<img src="docs/infographic.png" alt="Infographic: waarom handmatig bijhouden misgaat, de jaarcyclus in vier commando's, het ontwerpprincipe (de tool stelt voor, jij verklaart), het grootboek met twee datums en zonder gum, en waar je registratie staat." width="100%">
+
+</details>
 
 ## Waar je registratie staat
 
@@ -86,7 +95,7 @@ tien-werkdagengrens moet exact zijn.
 
 ## Disclaimer
 
-Dit is gereedschap voor je eigen administratie. Het is **geen fiscaal advies**.
+Dit is een tool voor je eigen administratie. Het is **geen fiscaal advies**.
 Wat je bij RVO indient, en of de uren die je registreert waarheidsgetrouw zijn en
 als S&O kwalificeren, blijft volledig je eigen verantwoordelijkheid. Twijfel je,
 raadpleeg dan je boekhouder of een WBSO-adviseur.
