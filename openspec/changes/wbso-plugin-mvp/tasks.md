@@ -67,7 +67,7 @@
 
 - [x] 8.1 `.claude-plugin/plugin.json` (naam `wbso`, Nederlandstalige metadata)
 - [x] 8.2 `.claude-plugin/marketplace.json` met de plugin in de repo-root
-- [ ] 8.3 Lokaal testen met `claude --plugin-dir .` tegen een testproject *(door Jacky — vraagt een eigen sessie)*
+- [x] 8.3 Lokaal testen met `claude --plugin-dir .` tegen een testproject — skills zichtbaar, `wbso` op PATH, init voelt als vier vragen
 - [x] 8.4 `claude plugin validate .` schoon
 - [x] 8.5 README bijwerken: status van "design phase" naar installatie-instructies
 
