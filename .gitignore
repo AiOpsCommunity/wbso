@@ -1,0 +1,6 @@
+node_modules/
+.DS_Store
+.idea/
+
+# persoonlijk eenmalig hulpje, hoort niet in een publieke repo
+verplaats-sessie.sh
