@@ -2,8 +2,8 @@
 
 - **Datum:** 10 augustus 2026
 - **Status:** ontwerp goedgekeurd, nog niet gepland
-- **Herkomst:** afgesplitst van `~/Projecten/helder.chat`, waar de eerste versie
-  (CSV + telscript) ontstond bij het voorbereiden van Jacky's eigen WBSO-aanvraag 2026
+- **Herkomst:** de eerste versie (een CSV met een telscript) ontstond bij het
+  voorbereiden van een eigen WBSO-aanvraag, en bleek algemeen genoeg om te delen
 
 ## Doel
 
@@ -34,7 +34,7 @@ scheiding tussen waarnemingen en claims (zie Bestandsindeling).
 | Besluit | Keuze | Waarom |
 |---|---|---|
 | Scope | Registratie + mededeling | De aanvraag zelf is jaarlijks en is waar slecht AI-werk het meeste schade doet; registratie is de dagelijkse pijn |
-| Opslag | Standalone, eigen bestanden | Jacky's bestaande `Time-and-project-tracker` ligt stil; een afhankelijkheid zou de drempel te hoog maken |
+| Opslag | Standalone, eigen bestanden | Een koppeling met een bestaande urenregistratie zou de installatiedrempel te hoog maken |
 | Bewijsbron dagvoorstel | Git-log, optioneel sessie-hook | Configureerbaar bij init |
 | Locatie registratie | Keuze bij init, standaard meegecommit | Git-historie is een onafhankelijk gedateerd spoor |
 | Taal | Code/docs Engels, interactie Nederlands | Vindbaarheid en bijdragen versus RVO-termen die niet vertalen |
@@ -46,8 +46,8 @@ scheiding tussen waarnemingen en claims (zie Bestandsindeling).
 Elke boeking draagt twee datums:
 
 ```jsonc
-{"datum":"2026-09-02","geregistreerd_op":"2026-09-03T18:22:04Z",
- "uren":7,"soort":"sao","project":"verifieerbaarheid",
+{"datum":"2026-03-02","geregistreerd_op":"2026-03-03T18:22:04Z",
+ "uren":7,"soort":"sao","project":"voorbeeldproject",
  "omschrijving":"Formaatnormalisatie bedragen/datums","ref":"knelpunt 1"}
 ```
 
@@ -95,13 +95,13 @@ iets" en "ik verklaar dit".
   "capture": { "git": true, "sessies": false },
   "aanvragen": {
     "2026": {
-      "periode": ["2026-09-01", "2026-12-31"],
-      "aangevraagde_uren": 440,
-      "tarief": 50,
+      "periode": ["2026-01-01", "2026-12-31"],
+      "aangevraagde_uren": 1200,
+      "tarief": 36,
       "forfait": true,
       "verklaringnummer": null,
       "projecten": [
-        { "id": "verifieerbaarheid", "naam": "…", "knelpunten": ["…"] }
+        { "id": "voorbeeldproject", "naam": "…", "knelpunten": ["…"] }
       ]
     }
   },
@@ -170,9 +170,19 @@ plugin-configuratie hoeft aan te raken. Hij raakt het grootboek nooit aan.
 
 ## Distributie
 
-Repo met `.claude-plugin/marketplace.json`, zodat installeren neerkomt op
-`/plugin marketplace add jackyraimond/wbso-uren`. Eventueel later indienen bij
-`claude-community`.
+Repo `AiOpsCommunity/wbso` met `.claude-plugin/marketplace.json` in de root en de
+plugin zelf eveneens in de root. Installeren komt daarmee neer op:
+
+```
+/plugin marketplace add AiOpsCommunity/wbso
+/plugin install wbso@wbso
+```
+
+Eventueel later indienen bij `claude-community`.
+
+De manifesten worden pas toegevoegd zodra er iets installeerbaars staat — een
+marketplace die naar een lege plugin wijst levert alleen teleurgestelde
+gebruikers op.
 
 De README krijgt een expliciete disclaimer: hulpmiddel voor de eigen
 administratie, geen fiscaal advies, en wat bij RVO wordt ingediend blijft de
@@ -193,7 +203,7 @@ geen framework. De skills zelf worden handmatig getest tegen een testproject.
   configuratie-invulling: korte labels waaraan boekingen worden opgehangen. Het
   levert nadrukkelijk geen tekst die je bij RVO indient.
 - Aggregatie van uren over meerdere medewerkers; de plugin is per persoon
-- Koppeling met `Time-and-project-tracker`, Moneybird of andere urenregistraties
+- Koppeling met Moneybird of andere bestaande urenregistraties
 - Meerdere administraties in één project
 - Automatisch boeken zonder bevestiging — uitgesloten door het uitgangspunt
 
