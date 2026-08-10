@@ -5,16 +5,16 @@
 ### Requirement: Init vult de configuratie in vier lagen
 
 `/wbso:init` MUST een `config.json` opleveren zonder de gebruiker een lang
-formulier voor te leggen. Het MUST precies vijf kernwaarden uitvragen
-(aanvraagperiode, aangevraagde uren, tarief, forfait of werkelijke kosten,
-opslaglocatie), de S&O-projecten en de afbakening **voorstellen** op basis van de
-repo, en waarden die op dat moment nog onbekend zijn leeg laten.
+formulier voor te leggen. Het MUST precies vier kernwaarden uitvragen
+(aanvraagperiode, aangevraagde uren, tarief, forfait of werkelijke kosten), de
+S&O-projecten en de afbakening **voorstellen** op basis van de repo, en waarden
+die op dat moment nog onbekend zijn leeg laten.
 
 #### Scenario: eerste opzet
 
 - **GIVEN** een project zonder `.wbso/`
 - **WHEN** de gebruiker `/wbso:init` draait
-- **THEN** worden vijf vragen gesteld, worden projecten en afbakening voorgesteld
+- **THEN** worden vier vragen gesteld, worden projecten en afbakening voorgesteld
   ter correctie, en staat er daarna een geldige `config.json`
 
 #### Scenario: verklaringnummer nog onbekend
@@ -65,16 +65,30 @@ overschreven of aangevuld moet worden.
 - **WHEN** de gebruiker `/wbso:init 2027` draait
 - **THEN** komt er een aanvraagblok voor 2027 bij en blijft 2026 ongewijzigd
 
-### Requirement: Opslaglocatie is een bewuste keuze
+### Requirement: Opslaglocatie wordt vermeld, niet gevraagd
 
-`/wbso:init` MUST de opslaglocatie vragen met `meegecommit` als standaard, en
-MUST bij de vraag toelichten wat `lokaal` en `buiten` opgeven aan bewijskracht.
-De bestandsindeling MUST identiek zijn ongeacht de keuze; alleen de wortel
-verschilt.
+`/wbso:init` MUST `meegecommit` als opslaglocatie gebruiken zonder ernaar te
+vragen, en MUST die keuze aan de gebruiker melden met de reden en de manier om
+hem te wijzigen. De bestandsindeling MUST identiek zijn ongeacht de keuze; alleen
+de opslagmap verschilt.
+
+#### Scenario: standaard zonder vraag
+
+- **GIVEN** een project zonder `.wbso/`
+- **WHEN** de gebruiker `/wbso:init` doorloopt
+- **THEN** wordt er niet naar de opslaglocatie gevraagd, en meldt init waar de
+  registratie komt te staan en hoe dat te wijzigen is
 
 #### Scenario: teamrepo
 
 - **GIVEN** een gebruiker die zijn uren niet met collega's wil delen
-- **WHEN** hij `lokaal` kiest
+- **WHEN** hij daarom vraagt om `lokaal`
 - **THEN** komt `.wbso/` in het project met een `.gitignore`-regel, en meldt init
   dat het git-bewijsspoor daarmee vervalt
+
+#### Scenario: aanwijzing dat meelezen onwenselijk is
+
+- **GIVEN** een repo met meerdere auteurs in de git-historie
+- **WHEN** init de opslaglocatie meldt
+- **THEN** wijst hij er actief op dat collega's de uren zullen zien en biedt hij
+  de alternatieven aan

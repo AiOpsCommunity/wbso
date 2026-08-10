@@ -2,25 +2,25 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { effectieveBoekingen, leesRegels, voegToe } from "../src/grootboek.mjs";
 import { berekenTotalen, naarCsv, totalenVan } from "../src/totalen.mjs";
-import { maakWortel, tellerId } from "./hulp.mjs";
+import { maakOpslagmap, tellerId } from "./hulp.mjs";
 
 function opstelling(configOverschrijf) {
-  const { wortel, config, opruimen } = maakWortel(configOverschrijf);
+  const { opslagmap, config, opruimen } = maakOpslagmap(configOverschrijf);
   const id = tellerId();
   const boek = (invoer, nu = new Date("2026-03-03T10:00:00Z")) =>
-    voegToe(wortel, "2026", invoer, { config, nu, id });
-  return { wortel, config, boek, opruimen };
+    voegToe(opslagmap, "2026", invoer, { config, nu, id });
+  return { opslagmap, config, boek, opruimen };
 }
 
 test("totalen tellen per maand en per project", (t) => {
-  const { wortel, config, boek, opruimen } = opstelling();
+  const { opslagmap, config, boek, opruimen } = opstelling();
   t.after(opruimen);
 
   boek({ datum: "2026-03-02", uren: 7, soort: "sao", project: "alfa", omschrijving: "A" });
   boek({ datum: "2026-03-03", uren: 3, soort: "sao", project: "beta", omschrijving: "B" });
   boek({ datum: "2026-04-01", uren: 2, soort: "overig", omschrijving: "CI" });
 
-  const totalen = totalenVan(wortel, "2026", config);
+  const totalen = totalenVan(opslagmap, "2026", config);
 
   assert.equal(totalen.sao, 10);
   assert.equal(totalen.overig, 2);
@@ -32,7 +32,7 @@ test("totalen tellen per maand en per project", (t) => {
 });
 
 test("gecorrigeerde uren worden niet dubbel geteld", (t) => {
-  const { wortel, config, boek, opruimen } = opstelling();
+  const { opslagmap, config, boek, opruimen } = opstelling();
   t.after(opruimen);
 
   const eerste = boek({
@@ -51,26 +51,26 @@ test("gecorrigeerde uren worden niet dubbel geteld", (t) => {
     corrigeert: eerste.id,
   });
 
-  assert.equal(totalenVan(wortel, "2026", config).sao, 5);
+  assert.equal(totalenVan(opslagmap, "2026", config).sao, 5);
 });
 
 test("een project zonder boekingen staat op nul in plaats van te ontbreken", (t) => {
-  const { wortel, config, boek, opruimen } = opstelling();
+  const { opslagmap, config, boek, opruimen } = opstelling();
   t.after(opruimen);
 
   boek({ datum: "2026-03-02", uren: 7, soort: "sao", project: "alfa", omschrijving: "A" });
 
-  assert.deepEqual(totalenVan(wortel, "2026", config).perProject, { alfa: 7, beta: 0 });
+  assert.deepEqual(totalenVan(opslagmap, "2026", config).perProject, { alfa: 7, beta: 0 });
 });
 
 test("S&O-aandeel en resterende uren", (t) => {
-  const { wortel, config, boek, opruimen } = opstelling();
+  const { opslagmap, config, boek, opruimen } = opstelling();
   t.after(opruimen);
 
   boek({ datum: "2026-03-02", uren: 30, soort: "sao", project: "alfa", omschrijving: "A" });
   boek({ datum: "2026-03-03", uren: 10, soort: "overig", omschrijving: "CI" });
 
-  const totalen = totalenVan(wortel, "2026", config);
+  const totalen = totalenVan(opslagmap, "2026", config);
   assert.equal(totalen.aandeel, 75);
   assert.equal(totalen.aangevraagd, 100);
   assert.equal(totalen.resterend, 70);
@@ -78,29 +78,29 @@ test("S&O-aandeel en resterende uren", (t) => {
 });
 
 test("overschrijding van de aangevraagde uren wordt gemeld", (t) => {
-  const { wortel, config, boek, opruimen } = opstelling();
+  const { opslagmap, config, boek, opruimen } = opstelling();
   t.after(opruimen);
 
   boek({ datum: "2026-03-02", uren: 60, soort: "sao", project: "alfa", omschrijving: "A" });
   boek({ datum: "2026-03-03", uren: 60, soort: "sao", project: "alfa", omschrijving: "B" });
 
-  const totalen = totalenVan(wortel, "2026", config);
+  const totalen = totalenVan(opslagmap, "2026", config);
   assert.equal(totalen.resterend, -20);
   assert.equal(totalen.overschrijding, 20);
 });
 
 test("leeg grootboek geeft nullen in plaats van een fout", (t) => {
-  const { wortel, config, opruimen } = opstelling();
+  const { opslagmap, config, opruimen } = opstelling();
   t.after(opruimen);
 
-  const totalen = totalenVan(wortel, "2026", config);
+  const totalen = totalenVan(opslagmap, "2026", config);
   assert.equal(totalen.sao, 0);
   assert.equal(totalen.aandeel, 0);
   assert.equal(totalen.resterend, 100);
 });
 
 test("berekenTotalen negeert ingetrokken boekingen", () => {
-  const config = maakWortel().config;
+  const config = maakOpslagmap().config;
   const totalen = berekenTotalen(
     [{ datum: "2026-03-02", uren: 7, soort: "sao", project: "alfa", omschrijving: "A" }],
     config,
@@ -110,13 +110,13 @@ test("berekenTotalen negeert ingetrokken boekingen", () => {
 });
 
 test("CSV bevat een kopregel en de effectieve boekingen op datum gesorteerd", (t) => {
-  const { wortel, boek, opruimen } = opstelling();
+  const { opslagmap, boek, opruimen } = opstelling();
   t.after(opruimen);
 
   boek({ datum: "2026-03-05", uren: 2, soort: "overig", omschrijving: "CI" });
   boek({ datum: "2026-03-02", uren: 7, soort: "sao", project: "alfa", omschrijving: "A" });
 
-  const regels = naarCsv(effectieveBoekingen(leesRegels(wortel, "2026"))).trimEnd().split("\n");
+  const regels = naarCsv(effectieveBoekingen(leesRegels(opslagmap, "2026"))).trimEnd().split("\n");
 
   assert.equal(regels[0], "datum,uren,soort,project,omschrijving,ref,geregistreerd_op");
   assert.match(regels[1], /^2026-03-02,7,sao,alfa,A,,/);
@@ -124,7 +124,7 @@ test("CSV bevat een kopregel en de effectieve boekingen op datum gesorteerd", (t
 });
 
 test("CSV citeert velden met een komma", (t) => {
-  const { wortel, boek, opruimen } = opstelling();
+  const { opslagmap, boek, opruimen } = opstelling();
   t.after(opruimen);
 
   boek({
@@ -135,6 +135,6 @@ test("CSV citeert velden met een komma", (t) => {
     omschrijving: "Normaliseren van bedragen, datums en tijden",
   });
 
-  const csv = naarCsv(effectieveBoekingen(leesRegels(wortel, "2026")));
+  const csv = naarCsv(effectieveBoekingen(leesRegels(opslagmap, "2026")));
   assert.match(csv, /"Normaliseren van bedragen, datums en tijden"/);
 });

@@ -37,16 +37,16 @@ function draai(map, args, invoer) {
   }
 }
 
-test("projectwortel werkt zonder bestaande configuratie", (t) => {
+test("projectmap werkt zonder bestaande configuratie", (t) => {
   const map = mkdtempSync(join(tmpdir(), "wbso-nieuw-"));
   mkdirSync(join(map, ".git"));
   t.after(() => rmSync(map, { recursive: true, force: true }));
 
-  const { code, uit } = draai(map, ["projectwortel"]);
+  const { code, uit } = draai(map, ["locaties"]);
   assert.equal(code, 0);
 
   const uitslag = JSON.parse(uit);
-  assert.equal(uitslag.locaties.meegecommit, join(uitslag.projectwortel, ".wbso"));
+  assert.equal(uitslag.locaties.meegecommit, join(uitslag.projectmap, ".wbso"));
   assert.match(uitslag.locaties.buiten, /\.wbso\//);
 });
 
@@ -79,11 +79,11 @@ test("valideer-config wijst een lege afbakening af", (t) => {
   assert.match(JSON.parse(fouttekst).fout, /afbakening/);
 });
 
-test("wortel toont de opgeloste opslagwortel", (t) => {
+test("opslagmap toont de opgeloste opslagmap", (t) => {
   const { map, opruimen } = project();
   t.after(opruimen);
 
-  const { code, uit } = draai(map, ["wortel"]);
+  const { code, uit } = draai(map, ["opslag"]);
   assert.equal(code, 0);
   assert.equal(JSON.parse(uit).extern, false);
 });

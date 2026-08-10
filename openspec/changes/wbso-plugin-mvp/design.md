@@ -22,7 +22,7 @@ Randvoorwaarden die de vorm bepalen:
 - Deterministische logica strikt gescheiden van modelgestuurde interactie.
 - Eén plek waar het grootboek gelezen en geschreven wordt, zodat de append-only
   garantie (ADR-01) op één plek afdwingbaar is.
-- De opslagwortel (ADR-03) is één keer opgelost; geen enkele skill kent de keuze.
+- De opslagmap (ADR-03) is één keer opgelost; geen enkele skill kent de keuze.
 
 **Non-Goals:**
 

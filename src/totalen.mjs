@@ -49,8 +49,8 @@ export function berekenTotalen(effectieve, config, jaar) {
   };
 }
 
-export function totalenVan(wortel, jaar, config) {
-  return berekenTotalen(effectieveBoekingen(leesRegels(wortel, jaar)), config, jaar);
+export function totalenVan(opslagmap, jaar, config) {
+  return berekenTotalen(effectieveBoekingen(leesRegels(opslagmap, jaar)), config, jaar);
 }
 
 function csvVeld(waarde) {

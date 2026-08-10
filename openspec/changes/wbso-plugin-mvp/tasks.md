@@ -7,7 +7,7 @@
 
 - [x] 1.1 `package.json` met `type: module`, testscript op `node --test`, geen runtime-dependencies
 - [x] 1.2 `bin/wbso` als uitvoerbare Node-entry met subcommando-router en `--json`-uitvoer
-- [x] 1.3 `resolve-root`: bepaal de opslagwortel uit de config (`meegecommit` / `lokaal` / `buiten`), met tests op alle drie de varianten
+- [x] 1.3 `resolve-root`: bepaal de opslagmap uit de config (`meegecommit` / `lokaal` / `buiten`), met tests op alle drie de varianten
 - [x] 1.4 Config lezen en valideren tegen een schema; duidelijke fout bij ontbrekende of onbekende velden
 
 ## 2. Grootboek

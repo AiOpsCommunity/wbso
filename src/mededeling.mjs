@@ -32,14 +32,14 @@ export function berekenAfwijking(gerealiseerd, aangevraagd) {
  * niet gereed: een mededeling doen op een grootboek dat niet klopt is erger dan
  * hem uitstellen.
  */
-export function stelMededelingSamen(wortel, jaar, config, { nu = new Date() } = {}) {
-  const controle = valideerGrootboek(wortel, jaar, config, { nu });
+export function stelMededelingSamen(opslagmap, jaar, config, { nu = new Date() } = {}) {
+  const controle = valideerGrootboek(opslagmap, jaar, config, { nu });
   if (controle.fouten.length > 0) {
     return { gereed: false, fouten: controle.fouten };
   }
 
   const aanvraag = aanvraagVan(config, jaar);
-  const totalen = totalenVan(wortel, jaar, config);
+  const totalen = totalenVan(opslagmap, jaar, config);
 
   return {
     gereed: true,

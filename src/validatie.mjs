@@ -14,9 +14,9 @@ export const TERMIJN_WERKDAGEN = 10;
 /** Vanaf hoeveel werkdagen een nog niet geboekte werkdag als bijna-te-laat geldt. */
 const WAARSCHUWING_VANAF = 8;
 
-export function valideerGrootboek(wortel, jaar, config, { nu = new Date() } = {}) {
+export function valideerGrootboek(opslagmap, jaar, config, { nu = new Date() } = {}) {
   const aanvraag = aanvraagVan(config, jaar);
-  const regels = leesRegels(wortel, jaar);
+  const regels = leesRegels(opslagmap, jaar);
   const fouten = [];
   const signalen = [];
 

@@ -3,14 +3,14 @@ import { readFileSync } from "node:fs";
 import { test } from "node:test";
 import { grootboekpad } from "../src/config.mjs";
 import { BoekingFout, effectieveBoekingen, leesRegels, voegToe } from "../src/grootboek.mjs";
-import { maakWortel, tellerId } from "./hulp.mjs";
+import { maakOpslagmap, tellerId } from "./hulp.mjs";
 
 function opstelling(configOverschrijf) {
-  const { wortel, config, opruimen } = maakWortel(configOverschrijf);
+  const { opslagmap, config, opruimen } = maakOpslagmap(configOverschrijf);
   const id = tellerId();
   const boek = (invoer, nu = new Date("2026-03-03T18:22:04Z")) =>
-    voegToe(wortel, "2026", invoer, { config, nu, id });
-  return { wortel, config, boek, opruimen };
+    voegToe(opslagmap, "2026", invoer, { config, nu, id });
+  return { opslagmap, config, boek, opruimen };
 }
 
 const BASIS = { datum: "2026-03-02", uren: 7, soort: "sao", project: "alfa", omschrijving: "Werk" };
@@ -99,19 +99,19 @@ test("uren moeten positief zijn", (t) => {
 });
 
 test("uren naar beneden bijstellen telt de correctie", (t) => {
-  const { wortel, boek, opruimen } = opstelling();
+  const { opslagmap, boek, opruimen } = opstelling();
   t.after(opruimen);
 
   const eerste = boek(BASIS);
   boek({ ...BASIS, uren: 5, omschrijving: "Werk (bijgesteld)", corrigeert: eerste.id });
 
-  const effectief = effectieveBoekingen(leesRegels(wortel, "2026"));
+  const effectief = effectieveBoekingen(leesRegels(opslagmap, "2026"));
   assert.equal(effectief.length, 1);
   assert.equal(effectief[0].uren, 5);
 });
 
 test("een ingetrokken boeking telt niet meer mee", (t) => {
-  const { wortel, boek, opruimen } = opstelling();
+  const { opslagmap, boek, opruimen } = opstelling();
   t.after(opruimen);
 
   const eerste = boek(BASIS);
@@ -122,19 +122,19 @@ test("een ingetrokken boeking telt niet meer mee", (t) => {
     corrigeert: eerste.id,
   });
 
-  assert.equal(leesRegels(wortel, "2026").length, 2);
-  assert.deepEqual(effectieveBoekingen(leesRegels(wortel, "2026")), []);
+  assert.equal(leesRegels(opslagmap, "2026").length, 2);
+  assert.deepEqual(effectieveBoekingen(leesRegels(opslagmap, "2026")), []);
 });
 
 test("keten van twee correcties laat alleen de laatste staan", (t) => {
-  const { wortel, boek, opruimen } = opstelling();
+  const { opslagmap, boek, opruimen } = opstelling();
   t.after(opruimen);
 
   const eerste = boek(BASIS);
   const tweede = boek({ ...BASIS, uren: 5, corrigeert: eerste.id });
   boek({ ...BASIS, uren: 6, corrigeert: tweede.id });
 
-  const effectief = effectieveBoekingen(leesRegels(wortel, "2026"));
+  const effectief = effectieveBoekingen(leesRegels(opslagmap, "2026"));
   assert.equal(effectief.length, 1);
   assert.equal(effectief[0].uren, 6);
 });
@@ -157,16 +157,16 @@ test("correctie naar een onbekende boeking wordt geweigerd", (t) => {
 });
 
 test("toevoegen wijzigt of verwijdert nooit een bestaande regel", (t) => {
-  const { wortel, boek, opruimen } = opstelling();
+  const { opslagmap, boek, opruimen } = opstelling();
   t.after(opruimen);
 
   const eerste = boek(BASIS);
-  const naEerste = readFileSync(grootboekpad(wortel, "2026"), "utf8");
+  const naEerste = readFileSync(grootboekpad(opslagmap, "2026"), "utf8");
 
   boek({ ...BASIS, uren: 5, corrigeert: eerste.id });
   boek({ datum: "2026-03-04", uren: 3, soort: "overig", omschrijving: "CI" });
 
-  const naAlles = readFileSync(grootboekpad(wortel, "2026"), "utf8");
+  const naAlles = readFileSync(grootboekpad(opslagmap, "2026"), "utf8");
   assert.ok(naAlles.startsWith(naEerste), "de eerste regel moet ongewijzigd vooraan blijven staan");
   assert.equal(naAlles.trimEnd().split("\n").length, 3);
 });

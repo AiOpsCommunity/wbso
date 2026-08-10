@@ -10,10 +10,10 @@ import { homedir } from "node:os";
 import { basename, join } from "node:path";
 import {
   ConfigFout,
-  bepaalWortel,
+  bepaalOpslagmap,
   leesConfig,
   valideerConfig,
-  vindProjectwortel,
+  vindProjectmap,
 } from "../src/config.mjs";
 import { BoekingFout, effectieveBoekingen, leesRegels, voegToe } from "../src/grootboek.mjs";
 import { stelMededelingSamen } from "../src/mededeling.mjs";
@@ -23,9 +23,9 @@ import { valideerGrootboek } from "../src/validatie.mjs";
 const GEBRUIK = `Gebruik: wbso <commando> [opties]
 
 Commando's:
-  projectwortel       Toon de projectwortel en de mogelijke opslaglocaties
+  locaties            Toon de projectmap en de mogelijke opslaglocaties
   valideer-config     Valideer een configuratie (JSON op stdin), zonder te schrijven
-  wortel              Toon de opgeloste opslagwortel
+  opslag              Toon de opslagmap die nu in gebruik is
   config              Toon de gevalideerde configuratie
   toevoegen           Voeg een boeking toe (JSON op stdin)
   valideer            Valideer het grootboek; exitcode 1 bij fouten
@@ -75,14 +75,14 @@ async function main() {
   const opties = leesOpties(rest);
 
   // Deze twee draaien vóór er een .wbso/ bestaat — /wbso:init leunt erop.
-  if (commando === "projectwortel") {
-    const projectwortel = vindProjectwortel(opties.cwd);
+  if (commando === "locaties") {
+    const projectmap = vindProjectmap(opties.cwd);
     toon({
-      projectwortel,
+      projectmap,
       locaties: {
-        meegecommit: join(projectwortel, ".wbso"),
-        lokaal: join(projectwortel, ".wbso"),
-        buiten: join(homedir(), ".wbso", basename(projectwortel)),
+        meegecommit: join(projectmap, ".wbso"),
+        lokaal: join(projectmap, ".wbso"),
+        buiten: join(homedir(), ".wbso", basename(projectmap)),
       },
     });
     return 0;
@@ -94,14 +94,14 @@ async function main() {
     return 0;
   }
 
-  const { wortel, projectwortel, extern } = bepaalWortel(opties.cwd);
+  const { opslagmap, projectmap, extern } = bepaalOpslagmap(opties.cwd);
 
-  if (commando === "wortel") {
-    toon({ wortel, projectwortel, extern });
+  if (commando === "opslag") {
+    toon({ opslagmap, projectmap, extern });
     return 0;
   }
 
-  const config = leesConfig(wortel);
+  const config = leesConfig(opslagmap);
 
   switch (commando) {
     case "config":
@@ -109,29 +109,29 @@ async function main() {
       return 0;
 
     case "toevoegen": {
-      const boeking = voegToe(wortel, opties.jaar, await leesStdin(), { config });
+      const boeking = voegToe(opslagmap, opties.jaar, await leesStdin(), { config });
       toon(boeking);
       return 0;
     }
 
     case "valideer": {
-      const uitslag = valideerGrootboek(wortel, opties.jaar, config);
+      const uitslag = valideerGrootboek(opslagmap, opties.jaar, config);
       toon(uitslag);
       return uitslag.fouten.length > 0 ? 1 : 0;
     }
 
     case "totalen":
-      toon(totalenVan(wortel, opties.jaar, config));
+      toon(totalenVan(opslagmap, opties.jaar, config));
       return 0;
 
     case "mededeling": {
-      const rapport = stelMededelingSamen(wortel, opties.jaar, config);
+      const rapport = stelMededelingSamen(opslagmap, opties.jaar, config);
       toon(rapport);
       return rapport.gereed ? 0 : 1;
     }
 
     case "export":
-      process.stdout.write(naarCsv(effectieveBoekingen(leesRegels(wortel, opties.jaar))));
+      process.stdout.write(naarCsv(effectieveBoekingen(leesRegels(opslagmap, opties.jaar))));
       return 0;
 
     default:

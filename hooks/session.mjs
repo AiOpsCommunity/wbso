@@ -12,7 +12,7 @@
 
 import { appendFileSync, mkdirSync } from "node:fs";
 import { dirname } from "node:path";
-import { bepaalWortel, leesConfig, sessiepad } from "../src/config.mjs";
+import { bepaalOpslagmap, leesConfig, sessiepad } from "../src/config.mjs";
 
 async function leesInvoer() {
   const stukken = [];
@@ -25,8 +25,8 @@ try {
   const invoer = await leesInvoer();
   const cwd = invoer.cwd ?? process.cwd();
 
-  const { wortel } = bepaalWortel(cwd);
-  const config = leesConfig(wortel);
+  const { opslagmap } = bepaalOpslagmap(cwd);
+  const config = leesConfig(opslagmap);
   if (config.capture?.sessies !== true) process.exit(0);
 
   const nu = new Date();
@@ -37,7 +37,7 @@ try {
     cwd,
   };
 
-  const pad = sessiepad(wortel, nu.getFullYear());
+  const pad = sessiepad(opslagmap, nu.getFullYear());
   mkdirSync(dirname(pad), { recursive: true });
   appendFileSync(pad, `${JSON.stringify(regel)}\n`, "utf8");
 } catch {

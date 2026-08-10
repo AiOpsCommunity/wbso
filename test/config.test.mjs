@@ -3,7 +3,7 @@ import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
-import { ConfigFout, bepaalWortel, leesConfig, valideerConfig } from "../src/config.mjs";
+import { ConfigFout, bepaalOpslagmap, leesConfig, valideerConfig } from "../src/config.mjs";
 import { maakConfig } from "./hulp.mjs";
 
 function tijdelijkProject() {
@@ -60,27 +60,27 @@ test("onbekende opslagvorm wordt geweigerd", () => {
   assert.throws(() => valideerConfig(config), /administratie.opslag/);
 });
 
-test("wortel bij meegecommit ligt in het project", (t) => {
+test("opslagmap bij meegecommit ligt in het project", (t) => {
   const { map, opruimen } = tijdelijkProject();
   t.after(opruimen);
   schrijfConfig(join(map, ".wbso"), maakConfig());
 
-  const uitslag = bepaalWortel(map, "/geen-thuis");
-  assert.equal(uitslag.wortel, join(map, ".wbso"));
+  const uitslag = bepaalOpslagmap(map, "/geen-thuis");
+  assert.equal(uitslag.opslagmap, join(map, ".wbso"));
   assert.equal(uitslag.extern, false);
 });
 
-test("wortel wordt ook gevonden vanuit een submap", (t) => {
+test("opslagmap wordt ook gevonden vanuit een submap", (t) => {
   const { map, opruimen } = tijdelijkProject();
   t.after(opruimen);
   schrijfConfig(join(map, ".wbso"), maakConfig());
   const diep = join(map, "src", "diep");
   mkdirSync(diep, { recursive: true });
 
-  assert.equal(bepaalWortel(diep, "/geen-thuis").wortel, join(map, ".wbso"));
+  assert.equal(bepaalOpslagmap(diep, "/geen-thuis").opslagmap, join(map, ".wbso"));
 });
 
-test("wortel bij buiten ligt in de thuismap onder de projectnaam", (t) => {
+test("opslagmap bij buiten ligt in de thuismap onder de projectnaam", (t) => {
   const { map, opruimen } = tijdelijkProject();
   const thuis = mkdtempSync(join(tmpdir(), "wbso-thuis-"));
   t.after(() => {
@@ -91,8 +91,8 @@ test("wortel bij buiten ligt in de thuismap onder de projectnaam", (t) => {
   const projectnaam = map.split("/").pop();
   schrijfConfig(join(thuis, ".wbso", projectnaam), maakConfig({ administratie: { naam: "T", opslag: "buiten" } }));
 
-  const uitslag = bepaalWortel(map, thuis);
-  assert.equal(uitslag.wortel, join(thuis, ".wbso", projectnaam));
+  const uitslag = bepaalOpslagmap(map, thuis);
+  assert.equal(uitslag.opslagmap, join(thuis, ".wbso", projectnaam));
   assert.equal(uitslag.extern, true);
 });
 
@@ -100,8 +100,8 @@ test("zonder configuratie volgt een uitlegbare fout", (t) => {
   const { map, opruimen } = tijdelijkProject();
   t.after(opruimen);
 
-  assert.throws(() => bepaalWortel(map, "/geen-thuis"), ConfigFout);
-  assert.throws(() => bepaalWortel(map, "/geen-thuis"), /wbso:init/);
+  assert.throws(() => bepaalOpslagmap(map, "/geen-thuis"), ConfigFout);
+  assert.throws(() => bepaalOpslagmap(map, "/geen-thuis"), /wbso:init/);
 });
 
 test("onleesbare JSON geeft een duidelijke melding", (t) => {

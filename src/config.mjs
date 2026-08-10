@@ -1,6 +1,6 @@
-// Configuratie lezen, valideren en de opslagwortel bepalen (ADR-03).
+// Configuratie lezen, valideren en de opslagmap bepalen (ADR-03).
 //
-// De wortel wordt hier één keer opgelost; geen enkele skill of ander
+// De opslagmap wordt hier één keer opgelost; geen enkele skill of ander
 // bronbestand kent de opslagkeuze verder nog.
 
 import { existsSync, readFileSync } from "node:fs";
@@ -12,8 +12,8 @@ const SOORTEN = ["sao", "overig"];
 
 export class ConfigFout extends Error {}
 
-/** Zoek de projectwortel: de dichtstbijzijnde map met .git, anders `start` zelf. */
-export function vindProjectwortel(start) {
+/** Zoek de projectmap: de dichtstbijzijnde map met .git, anders `start` zelf. */
+export function vindProjectmap(start) {
   let map = resolve(start);
   for (;;) {
     if (existsSync(join(map, ".git"))) return map;
@@ -27,36 +27,36 @@ export function vindProjectwortel(start) {
  * Bepaal waar de WBSO-bestanden staan.
  *
  * Bij `meegecommit` en `lokaal` is dat `.wbso/` in het project; bij `buiten`
- * `~/.wbso/<projectnaam>/`. De indeling binnen die wortel is in alle gevallen
+ * `~/.wbso/<projectnaam>/`. De indeling binnen die opslagmap is in alle gevallen
  * identiek. Omdat de opslagkeuze zelf in de config staat, wordt eerst de
  * projectmap geprobeerd en daarna pas de map buiten het project.
  */
-export function bepaalWortel(cwd = process.cwd(), thuis = homedir()) {
-  const projectwortel = vindProjectwortel(cwd);
+export function bepaalOpslagmap(cwd = process.cwd(), thuis = homedir()) {
+  const projectmap = vindProjectmap(cwd);
 
-  const inProject = join(projectwortel, ".wbso");
+  const inProject = join(projectmap, ".wbso");
   if (existsSync(join(inProject, "config.json"))) {
-    return { wortel: inProject, projectwortel, extern: false };
+    return { opslagmap: inProject, projectmap, extern: false };
   }
 
-  const buiten = join(thuis, ".wbso", basename(projectwortel));
+  const buiten = join(thuis, ".wbso", basename(projectmap));
   if (existsSync(join(buiten, "config.json"))) {
-    return { wortel: buiten, projectwortel, extern: true };
+    return { opslagmap: buiten, projectmap, extern: true };
   }
 
   throw new ConfigFout(
-    `Geen WBSO-configuratie gevonden voor ${projectwortel}. Draai /wbso:init om er een aan te maken.`,
+    `Geen WBSO-configuratie gevonden voor ${projectmap}. Draai /wbso:init om er een aan te maken.`,
   );
 }
 
 /** Pad naar het grootboek van een kalenderjaar. */
-export function grootboekpad(wortel, jaar) {
-  return join(wortel, `uren-${jaar}.jsonl`);
+export function grootboekpad(opslagmap, jaar) {
+  return join(opslagmap, `uren-${jaar}.jsonl`);
 }
 
 /** Pad naar het sessiebestand van een kalenderjaar. */
-export function sessiepad(wortel, jaar) {
-  return join(wortel, `sessies-${jaar}.jsonl`);
+export function sessiepad(opslagmap, jaar) {
+  return join(opslagmap, `sessies-${jaar}.jsonl`);
 }
 
 function eisObject(waarde, pad) {
@@ -183,9 +183,9 @@ export function valideerConfig(config) {
   return config;
 }
 
-/** Lees en valideer de configuratie vanaf de opgeloste wortel. */
-export function leesConfig(wortel) {
-  const pad = join(wortel, "config.json");
+/** Lees en valideer de configuratie vanaf de opgeloste opslagmap. */
+export function leesConfig(opslagmap) {
+  const pad = join(opslagmap, "config.json");
   let ruw;
   try {
     ruw = readFileSync(pad, "utf8");

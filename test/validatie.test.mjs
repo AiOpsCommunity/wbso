@@ -4,21 +4,21 @@ import { test } from "node:test";
 import { grootboekpad } from "../src/config.mjs";
 import { voegToe } from "../src/grootboek.mjs";
 import { valideerGrootboek } from "../src/validatie.mjs";
-import { maakWortel, tellerId } from "./hulp.mjs";
+import { maakOpslagmap, tellerId } from "./hulp.mjs";
 
 const BASIS = { datum: "2026-03-02", uren: 7, soort: "sao", project: "alfa", omschrijving: "Werk" };
 
 function opstelling(configOverschrijf) {
-  const { wortel, config, opruimen } = maakWortel(configOverschrijf);
+  const { opslagmap, config, opruimen } = maakOpslagmap(configOverschrijf);
   const id = tellerId();
-  const boek = (invoer, nu) => voegToe(wortel, "2026", invoer, { config, nu: new Date(nu), id });
-  const valideer = (nu) => valideerGrootboek(wortel, "2026", config, { nu: new Date(nu) });
-  return { wortel, config, boek, valideer, opruimen };
+  const boek = (invoer, nu) => voegToe(opslagmap, "2026", invoer, { config, nu: new Date(nu), id });
+  const valideer = (nu) => valideerGrootboek(opslagmap, "2026", config, { nu: new Date(nu) });
+  return { opslagmap, config, boek, valideer, opruimen };
 }
 
 /** Schrijf een regel buiten voegToe om, zodat een met de hand bewerkt grootboek te testen is. */
-function schrijfRuw(wortel, boeking) {
-  appendFileSync(grootboekpad(wortel, "2026"), `${JSON.stringify(boeking)}\n`, "utf8");
+function schrijfRuw(opslagmap, boeking) {
+  appendFileSync(grootboekpad(opslagmap, "2026"), `${JSON.stringify(boeking)}\n`, "utf8");
 }
 
 test("schoon grootboek levert geen fouten", (t) => {
@@ -52,20 +52,20 @@ test("registratie op de tiende werkdag is nog op tijd", (t) => {
 });
 
 test("registratie vóór de werkdatum is een fout", (t) => {
-  const { wortel, valideer, opruimen } = opstelling();
+  const { opslagmap, valideer, opruimen } = opstelling();
   t.after(opruimen);
 
-  schrijfRuw(wortel, { id: "x", ...BASIS, geregistreerd_op: "2026-03-01T10:00:00Z" });
+  schrijfRuw(opslagmap, { id: "x", ...BASIS, geregistreerd_op: "2026-03-01T10:00:00Z" });
   const uitslag = valideer("2026-03-05T10:00:00Z");
 
   assert.match(uitslag.fouten[0].melding, /vóór de werkdatum/);
 });
 
 test("ontbrekend id en geregistreerd_op worden gemeld", (t) => {
-  const { wortel, valideer, opruimen } = opstelling();
+  const { opslagmap, valideer, opruimen } = opstelling();
   t.after(opruimen);
 
-  schrijfRuw(wortel, BASIS);
+  schrijfRuw(opslagmap, BASIS);
   const meldingen = valideer("2026-03-05T10:00:00Z").fouten.map((f) => f.melding);
 
   assert.ok(meldingen.some((m) => /geen id/.test(m)));
@@ -73,10 +73,10 @@ test("ontbrekend id en geregistreerd_op worden gemeld", (t) => {
 });
 
 test("met de hand toegevoegde regel met onbekend project wordt gemeld", (t) => {
-  const { wortel, valideer, opruimen } = opstelling();
+  const { opslagmap, valideer, opruimen } = opstelling();
   t.after(opruimen);
 
-  schrijfRuw(wortel, {
+  schrijfRuw(opslagmap, {
     id: "x",
     ...BASIS,
     project: "gamma",

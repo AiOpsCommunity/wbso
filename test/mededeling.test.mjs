@@ -4,16 +4,16 @@ import { test } from "node:test";
 import { grootboekpad } from "../src/config.mjs";
 import { voegToe } from "../src/grootboek.mjs";
 import { berekenAfwijking, stelMededelingSamen } from "../src/mededeling.mjs";
-import { maakWortel, tellerId } from "./hulp.mjs";
+import { maakOpslagmap, tellerId } from "./hulp.mjs";
 
 function opstelling(configOverschrijf) {
-  const { wortel, config, opruimen } = maakWortel(configOverschrijf);
+  const { opslagmap, config, opruimen } = maakOpslagmap(configOverschrijf);
   const id = tellerId();
   const boek = (invoer, nu = "2026-03-03T10:00:00Z") =>
-    voegToe(wortel, "2026", invoer, { config, nu: new Date(nu), id });
+    voegToe(opslagmap, "2026", invoer, { config, nu: new Date(nu), id });
   const rapport = (nu = "2026-03-04T10:00:00Z") =>
-    stelMededelingSamen(wortel, "2026", config, { nu: new Date(nu) });
-  return { wortel, config, boek, rapport, opruimen };
+    stelMededelingSamen(opslagmap, "2026", config, { nu: new Date(nu) });
+  return { opslagmap, config, boek, rapport, opruimen };
 }
 
 test("gelijk aantal uren geeft geen gevolg", () => {
@@ -35,11 +35,11 @@ test("meer gerealiseerd wordt niet vergoed", () => {
 });
 
 test("rapport is niet gereed zolang er validatiefouten zijn", (t) => {
-  const { wortel, rapport, opruimen } = opstelling();
+  const { opslagmap, rapport, opruimen } = opstelling();
   t.after(opruimen);
 
   writeFileSync(
-    grootboekpad(wortel, "2026"),
+    grootboekpad(opslagmap, "2026"),
     `${JSON.stringify({ datum: "2026-03-02", uren: 7, soort: "sao", project: "gamma", omschrijving: "X" })}\n`,
     "utf8",
   );

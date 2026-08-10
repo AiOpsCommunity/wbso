@@ -15,16 +15,17 @@ herkent in het eLoket.
 ## Bepaal eerst waar je bent
 
 ```
-wbso projectwortel
+wbso locaties
 ```
 
-Dit geeft de projectwortel en de drie mogelijke opslaglocaties. Bestaat er al een
+Dit geeft de projectmap en de drie mogelijke opslaglocaties. Bestaat er al een
 configuratie (`wbso config` slaagt), dan ga je een **jaar toevoegen** — zie
 "Een jaar toevoegen" onderaan. Anders doorloop je de volledige opzet.
 
-## Laag 1 — de vijf kernvragen
+## Laag 1 — de vier kernvragen
 
-Stel deze vijf, niet meer. Alles daarbuiten stel je voor in plaats van te vragen.
+Stel deze vier, niet meer. Alles daarbuiten stel je voor of vermeld je, in plaats
+van te vragen.
 
 1. **Aanvraagperiode.** Begin- en einddatum. De periode loopt altijd door tot en
    met 31 december van dat jaar; een S&O-verklaring gaat nooit over de jaargrens.
@@ -32,16 +33,28 @@ Stel deze vijf, niet meer. Alles daarbuiten stel je voor in plaats van te vragen
 3. **Tarief.** 36% (eerste schijf), 50% (starter) of 16% (tweede schijf).
 4. **Kosten en uitgaven:** kostenforfait of werkelijke kosten. Deze keuze geldt
    voor het hele kalenderjaar en is daarna niet meer te wijzigen.
-5. **Opslaglocatie.** Standaard `meegecommit`. Leg bij deze vraag uit wat de
-   alternatieven kosten:
 
-   - `meegecommit` — `.wbso/` in de repo. De git-historie wordt een tweede,
-     onafhankelijk bewijs dat je binnen tien werkdagen hebt geregistreerd. In een
-     team- of publieke repo zien anderen wel je uren.
-   - `lokaal` — `.wbso/` met een `.gitignore`-regel. Privé, maar je levert dat
-     tweede bewijsspoor in en moet zelf back-uppen.
-   - `buiten` — `~/.wbso/<projectnaam>/`. Voor repo's waar je niets mag
-     toevoegen. Let op: hernoem je de projectmap, dan raakt de koppeling kwijt.
+## Opslaglocatie: vermelden, niet vragen
+
+De registratie komt in `.wbso/` in het project te staan en wordt **meegecommit**.
+Dat is de standaard en daar vraag je niet naar — je meldt het, met de reden en de
+uitweg, in één zin of twee:
+
+> Je registratie komt in `.wbso/` en gaat mee in git. Dat geeft je een tweede,
+> onafhankelijk bewijs dat je binnen tien werkdagen hebt geregistreerd. Wil je dat
+> niet — bijvoorbeeld omdat anderen in deze repo je uren dan zien — zeg het, dan
+> zet ik hem lokaal of buiten het project.
+
+Vraagt de gebruiker erom, dan zijn de alternatieven:
+
+- `lokaal` — `.wbso/` met een `.gitignore`-regel. Privé, maar je levert dat
+  tweede bewijsspoor in en moet zelf back-uppen.
+- `buiten` — `~/.wbso/<projectnaam>/`. Voor repo's waar je niets mag toevoegen.
+  Let op: hernoem je de projectmap, dan raakt de koppeling kwijt.
+
+Zie je aanwijzingen dat meelezen onwenselijk is — meerdere auteurs in
+`git log`, een publieke remote — noem dat dan actief bij je mededeling in plaats
+van te wachten tot de gebruiker eraan denkt.
 
 ## Laag 2 — projecten voorstellen
 

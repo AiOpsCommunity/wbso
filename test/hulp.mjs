@@ -1,4 +1,4 @@
-// Gedeelde hulpmiddelen voor de tests: een tijdelijke wortel met configuratie,
+// Gedeelde hulpmiddelen voor de tests: een tijdelijke opslagmap met configuratie,
 // en een teller-id zodat boekingen in tests voorspelbare ids krijgen.
 
 import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
@@ -27,12 +27,12 @@ export function maakConfig(overschrijf = {}) {
   };
 }
 
-/** Maak een tijdelijke wortel met config.json. Geeft {wortel, config, opruimen}. */
-export function maakWortel(configOverschrijf = {}) {
-  const wortel = mkdtempSync(join(tmpdir(), "wbso-test-"));
+/** Maak een tijdelijke opslagmap met config.json. Geeft {opslagmap, config, opruimen}. */
+export function maakOpslagmap(configOverschrijf = {}) {
+  const opslagmap = mkdtempSync(join(tmpdir(), "wbso-test-"));
   const config = maakConfig(configOverschrijf);
-  writeFileSync(join(wortel, "config.json"), JSON.stringify(config), "utf8");
-  return { wortel, config, opruimen: () => rmSync(wortel, { recursive: true, force: true }) };
+  writeFileSync(join(opslagmap, "config.json"), JSON.stringify(config), "utf8");
+  return { opslagmap, config, opruimen: () => rmSync(opslagmap, { recursive: true, force: true }) };
 }
 
 /** Oplopende ids, zodat tests naar een boeking kunnen verwijzen zonder UUID's. */

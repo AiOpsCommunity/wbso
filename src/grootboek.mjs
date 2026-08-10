@@ -26,8 +26,8 @@ const VELDEN = [
 ];
 
 /** Lees alle regels van een kalenderjaar, met regelnummer voor foutmeldingen. */
-export function leesRegels(wortel, jaar) {
-  const pad = grootboekpad(wortel, jaar);
+export function leesRegels(opslagmap, jaar) {
+  const pad = grootboekpad(opslagmap, jaar);
   if (!existsSync(pad)) return [];
 
   const regels = [];
@@ -134,7 +134,7 @@ export function controleerBoeking(invoer, { config, jaar, bestaande }) {
  * `geregistreerd_op` wordt hier gezet en nooit door de aanroeper meegegeven —
  * dat veld is het bewijs voor de tien-werkdageneis en mag niet stuurbaar zijn.
  */
-export function voegToe(wortel, jaar, invoer, { config, nu = new Date(), id = randomUUID } = {}) {
+export function voegToe(opslagmap, jaar, invoer, { config, nu = new Date(), id = randomUUID } = {}) {
   if ("geregistreerd_op" in invoer) {
     throw new BoekingFout("geregistreerd_op wordt door het grootboek gezet en mag niet worden meegegeven");
   }
@@ -143,7 +143,7 @@ export function voegToe(wortel, jaar, invoer, { config, nu = new Date(), id = ra
     throw new BoekingFout(`onbekende velden in de boeking: ${onbekend.join(", ")}`);
   }
 
-  const bestaande = leesRegels(wortel, jaar);
+  const bestaande = leesRegels(opslagmap, jaar);
   controleerBoeking(invoer, { config, jaar, bestaande });
 
   const boeking = {
@@ -162,7 +162,7 @@ export function voegToe(wortel, jaar, invoer, { config, nu = new Date(), id = ra
     ...(invoer.corrigeert ? { corrigeert: invoer.corrigeert } : {}),
   };
 
-  const pad = grootboekpad(wortel, jaar);
+  const pad = grootboekpad(opslagmap, jaar);
   mkdirSync(dirname(pad), { recursive: true });
   appendFileSync(pad, `${JSON.stringify(boeking)}\n`, "utf8");
   return boeking;
