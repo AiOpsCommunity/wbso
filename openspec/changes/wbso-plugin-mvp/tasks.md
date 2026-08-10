@@ -65,14 +65,14 @@
 
 ## 8. Plugin-manifest en publicatie
 
-- [ ] 8.1 `.claude-plugin/plugin.json` (naam `wbso`, Nederlandstalige metadata)
-- [ ] 8.2 `.claude-plugin/marketplace.json` met de plugin in de repo-root
-- [ ] 8.3 Lokaal testen met `claude --plugin-dir .` tegen een testproject
-- [ ] 8.4 `claude plugin validate .` schoon
-- [ ] 8.5 README bijwerken: status van "design phase" naar installatie-instructies
+- [x] 8.1 `.claude-plugin/plugin.json` (naam `wbso`, Nederlandstalige metadata)
+- [x] 8.2 `.claude-plugin/marketplace.json` met de plugin in de repo-root
+- [ ] 8.3 Lokaal testen met `claude --plugin-dir .` tegen een testproject *(door Jacky — vraagt een eigen sessie)*
+- [x] 8.4 `claude plugin validate .` schoon
+- [x] 8.5 README bijwerken: status van "design phase" naar installatie-instructies
 
 ## 9. Documentatie
 
-- [ ] 9.1 Voorbeeldconfiguratie en een geannoteerd voorbeeldgrootboek in `docs/`
-- [ ] 9.2 Korte uitleg van de tien-werkdagenregel en waarom de tool zo werkt, met verwijzing naar ADR-01 en ADR-02
-- [ ] 9.3 Disclaimer prominent in README en in de uitvoer van `/wbso:mededeling`
+- [x] 9.1 Voorbeeldconfiguratie en een geannoteerd voorbeeldgrootboek in `docs/`
+- [x] 9.2 Korte uitleg van de tien-werkdagenregel en waarom de tool zo werkt, met verwijzing naar ADR-01 en ADR-02
+- [x] 9.3 Disclaimer prominent in README en in de uitvoer van `/wbso:mededeling`

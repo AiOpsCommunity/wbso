@@ -1,0 +1,13 @@
+{
+  "name": "wbso",
+  "description": "Houd je S&O-uren bij voor de WBSO: dagelijks boeken op basis van je commits, bewaking van de tien-werkdagentermijn, en het jaaroverzicht voor RVO.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Jacky Raimond",
+    "url": "https://jackyraimond.nl/"
+  },
+  "homepage": "https://github.com/AiOpsCommunity/wbso",
+  "repository": "https://github.com/AiOpsCommunity/wbso",
+  "license": "MIT",
+  "keywords": ["wbso", "rvo", "urenregistratie", "s&o", "subsidie", "nederland"]
+}

@@ -1,0 +1,22 @@
+{
+  "name": "wbso",
+  "owner": {
+    "name": "Jacky Raimond",
+    "url": "https://jackyraimond.nl/"
+  },
+  "description": "WBSO tool voor Claude Code",
+  "plugins": [
+    {
+      "name": "wbso",
+      "source": "./",
+      "description": "Houd je S&O-uren bij voor de WBSO: dagelijks boeken op basis van je commits, bewaking van de tien-werkdagentermijn, en het jaaroverzicht voor RVO.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Jacky Raimond",
+        "url": "https://jackyraimond.nl/"
+      },
+      "category": "productivity",
+      "tags": ["wbso", "rvo", "urenregistratie", "nederland"]
+    }
+  ]
+}
