@@ -1,0 +1,111 @@
+#!/usr/bin/env node
+// Deterministische kern van de WBSO-plugin (zie design.md).
+//
+// De skills roepen dit script aan en maken van de JSON-uitvoer Nederlands
+// proza. Alles wat geteld, gecontroleerd of gedateerd moet worden gebeurt hier
+// en niet in een skilltekst — een taalmodel is geen betrouwbare optelmachine,
+// en de tien-werkdagengrens moet exact zijn.
+
+import { ConfigFout, bepaalWortel, leesConfig } from "../src/config.mjs";
+import { BoekingFout, effectieveBoekingen, leesRegels, voegToe } from "../src/grootboek.mjs";
+import { naarCsv, totalenVan } from "../src/totalen.mjs";
+import { valideerGrootboek } from "../src/validatie.mjs";
+
+const GEBRUIK = `Gebruik: wbso <commando> [opties]
+
+Commando's:
+  wortel              Toon de opgeloste opslagwortel
+  config              Toon de gevalideerde configuratie
+  toevoegen           Voeg een boeking toe (JSON op stdin)
+  valideer            Valideer het grootboek; exitcode 1 bij fouten
+  totalen             Totalen per maand en per project
+  export              CSV van de effectieve boekingen naar stdout
+
+Opties:
+  --jaar <jjjj>       Kalenderjaar (standaard: huidig jaar)
+  --cwd <pad>         Werkdirectory om vanaf te zoeken
+`;
+
+function leesOpties(argv) {
+  const opties = { jaar: String(new Date().getFullYear()), cwd: process.cwd() };
+  for (let i = 0; i < argv.length; i++) {
+    if (argv[i] === "--jaar") opties.jaar = argv[++i];
+    else if (argv[i] === "--cwd") opties.cwd = argv[++i];
+    else throw new ConfigFout(`Onbekende optie: ${argv[i]}`);
+  }
+  if (!/^\d{4}$/.test(opties.jaar)) throw new ConfigFout(`--jaar "${opties.jaar}" moet een jaartal zijn`);
+  return opties;
+}
+
+async function leesStdin() {
+  const stukken = [];
+  for await (const stuk of process.stdin) stukken.push(stuk);
+  const tekst = Buffer.concat(stukken).toString("utf8").trim();
+  if (tekst === "") throw new BoekingFout("Geen boeking op stdin ontvangen");
+  try {
+    return JSON.parse(tekst);
+  } catch (fout) {
+    throw new BoekingFout(`Boeking op stdin is geen geldige JSON: ${fout.message}`);
+  }
+}
+
+function toon(waarde) {
+  process.stdout.write(`${JSON.stringify(waarde, null, 2)}\n`);
+}
+
+async function main() {
+  const [commando, ...rest] = process.argv.slice(2);
+  if (!commando || commando === "help" || commando === "--help") {
+    process.stdout.write(GEBRUIK);
+    return 0;
+  }
+
+  const opties = leesOpties(rest);
+  const { wortel, projectwortel, extern } = bepaalWortel(opties.cwd);
+
+  if (commando === "wortel") {
+    toon({ wortel, projectwortel, extern });
+    return 0;
+  }
+
+  const config = leesConfig(wortel);
+
+  switch (commando) {
+    case "config":
+      toon(config);
+      return 0;
+
+    case "toevoegen": {
+      const boeking = voegToe(wortel, opties.jaar, await leesStdin(), { config });
+      toon(boeking);
+      return 0;
+    }
+
+    case "valideer": {
+      const uitslag = valideerGrootboek(wortel, opties.jaar, config);
+      toon(uitslag);
+      return uitslag.fouten.length > 0 ? 1 : 0;
+    }
+
+    case "totalen":
+      toon(totalenVan(wortel, opties.jaar, config));
+      return 0;
+
+    case "export":
+      process.stdout.write(naarCsv(effectieveBoekingen(leesRegels(wortel, opties.jaar))));
+      return 0;
+
+    default:
+      process.stderr.write(`Onbekend commando: ${commando}\n\n${GEBRUIK}`);
+      return 2;
+  }
+}
+
+try {
+  process.exitCode = await main();
+} catch (fout) {
+  const verwacht = fout instanceof ConfigFout || fout instanceof BoekingFout;
+  process.stderr.write(`${JSON.stringify({ fout: fout.message }, null, 2)}\n`);
+  if (!verwacht) process.stderr.write(`${fout.stack}\n`);
+  process.exitCode = 1;
+}

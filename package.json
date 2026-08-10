@@ -1,0 +1,13 @@
+{
+  "name": "wbso",
+  "version": "0.1.0",
+  "description": "Claude Code-plugin voor het bijhouden van S&O-uren voor de WBSO",
+  "type": "module",
+  "license": "MIT",
+  "bin": { "wbso": "./bin/wbso" },
+  "scripts": {
+    "test": "node --test \"test/*.test.mjs\""
+  },
+  "engines": { "node": ">=20" },
+  "files": ["bin", "src"]
+}

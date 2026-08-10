@@ -5,29 +5,29 @@
 
 ## 1. Fundament
 
-- [ ] 1.1 `package.json` met `type: module`, testscript op `node --test`, geen runtime-dependencies
-- [ ] 1.2 `bin/wbso` als uitvoerbare Node-entry met subcommando-router en `--json`-uitvoer
-- [ ] 1.3 `resolve-root`: bepaal de opslagwortel uit de config (`meegecommit` / `lokaal` / `buiten`), met tests op alle drie de varianten
-- [ ] 1.4 Config lezen en valideren tegen een schema; duidelijke fout bij ontbrekende of onbekende velden
+- [x] 1.1 `package.json` met `type: module`, testscript op `node --test`, geen runtime-dependencies
+- [x] 1.2 `bin/wbso` als uitvoerbare Node-entry met subcommando-router en `--json`-uitvoer
+- [x] 1.3 `resolve-root`: bepaal de opslagwortel uit de config (`meegecommit` / `lokaal` / `buiten`), met tests op alle drie de varianten
+- [x] 1.4 Config lezen en valideren tegen een schema; duidelijke fout bij ontbrekende of onbekende velden
 
 ## 2. Grootboek
 
-- [ ] 2.1 `append`: schrijf één JSONL-regel met `geregistreerd_op` gezet door het script, nooit door de aanroeper
-- [ ] 2.2 Weiger boekingen buiten de aanvraagperiode en buiten het kalenderjaar van het grootboek
-- [ ] 2.3 Weiger `sao`-boekingen met onbekend project-id of lege omschrijving
-- [ ] 2.4 Correctieregels: `corrigeert`-veld, verwijzing naar een bestaande regel, weiger een correctie op een al gecorrigeerde regel
-- [ ] 2.5 Lezer die correcties toepast en de effectieve boekingen teruggeeft; tests op bijstellen, intrekken en een keten van twee correcties
-- [ ] 2.6 Test dat geen enkel codepad een bestaande regel wijzigt of verwijdert
+- [x] 2.1 `append`: schrijf één JSONL-regel met `geregistreerd_op` gezet door het script, nooit door de aanroeper
+- [x] 2.2 Weiger boekingen buiten de aanvraagperiode en buiten het kalenderjaar van het grootboek
+- [x] 2.3 Weiger `sao`-boekingen met onbekend project-id of lege omschrijving
+- [x] 2.4 Correctieregels: `corrigeert`-veld, verwijzing naar een bestaande regel, weiger een correctie op een al gecorrigeerde regel
+- [x] 2.5 Lezer die correcties toepast en de effectieve boekingen teruggeeft; tests op bijstellen, intrekken en een keten van twee correcties
+- [x] 2.6 Test dat geen enkel codepad een bestaande regel wijzigt of verwijdert
 
 ## 3. Validatie en totalen
 
-- [ ] 3.1 `validate`: datumformaat, uren positief, soort, project-verwijzing, periode, jaargrens — met regelnummer per bevinding
-- [ ] 3.2 Werkdagenberekening (ma–vr, geen feestdagen) met tests op weekendgrenzen en jaarwisseling
-- [ ] 3.3 Tien-werkdagencontrole: te laat geregistreerde boekingen, plus werkdagen zonder boeking die de grens naderen
-- [ ] 3.4 `totals`: per maand, per project, S&O-aandeel, resterend tot het aangevraagde aantal, en signaal bij overschrijding
-- [ ] 3.5 Niet-nul exitcode bij validatiefouten
-- [ ] 3.6 `export`: CSV met de effectieve boekingen van een jaar
-- [ ] 3.7 `seed/wbso-uren.mjs` verwijderen zodra de logica hier volledig gedekt is
+- [x] 3.1 `validate`: datumformaat, uren positief, soort, project-verwijzing, periode, jaargrens — met regelnummer per bevinding
+- [x] 3.2 Werkdagenberekening (ma–vr, geen feestdagen) met tests op weekendgrenzen en jaarwisseling
+- [x] 3.3 Tien-werkdagencontrole: te laat geregistreerde boekingen, plus werkdagen zonder boeking die de grens naderen
+- [x] 3.4 `totals`: per maand, per project, S&O-aandeel, resterend tot het aangevraagde aantal, en signaal bij overschrijding
+- [x] 3.5 Niet-nul exitcode bij validatiefouten
+- [x] 3.6 `export`: CSV met de effectieve boekingen van een jaar
+- [x] 3.7 `seed/wbso-uren.mjs` verwijderen zodra de logica hier volledig gedekt is
 
 ## 4. Skill `/wbso:init`
 
