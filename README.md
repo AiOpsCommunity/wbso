@@ -1,58 +1,65 @@
 # wbso
 
-A Claude Code plugin for tracking S&O hours for the Dutch **WBSO** tax credit
-(*Wet Bevordering Speur- en Ontwikkelingswerk*).
+Een Claude Code-plugin voor het bijhouden van S&O-uren voor de **WBSO** (Wet
+Bevordering Speur- en Ontwikkelingswerk).
 
-> **Status: design phase.** The design is settled and committed; the plugin is
-> not implemented yet and is not installable. See
-> [the design document](docs/superpowers/specs/2026-08-10-wbso-plugin-design.md)
-> (in Dutch).
+> **Status: ontwerpfase.** Het ontwerp ligt vast, de plugin is nog niet gebouwd
+> en dus nog niet te installeren. Zie
+> [de change](openspec/changes/wbso-plugin-mvp/proposal.md) en de
+> [architectuurbesluiten](docs/adr/).
 
-## What it will do
+## Wat het gaat doen
 
-The WBSO requires you to record R&D hours **within ten working days**, traceable
-to a specific S&O project, and clearly separated from work that doesn't qualify.
-Doing that by hand is tedious enough that people postpone it — and reconstructing
-hours afterwards is exactly what the scheme does not allow.
+De WBSO eist dat je S&O-uren **binnen tien werkdagen** vastlegt, herleidbaar naar
+een S&O-project en gescheiden van werk dat niet kwalificeert. Dat handmatig
+bijhouden is vervelend genoeg dat mensen het uitstellen — en achteraf
+reconstrueren is precies wat de regeling uitsluit. Wie zijn registratie niet op
+orde heeft, verliest bij een controle uren die hij wél heeft gemaakt.
 
-The plugin turns that into a short daily conversation:
+Als je met Claude Code werkt heb je tegelijk een ongebruikte geheugensteun
+liggen: je commits zijn een gedateerd logboek van wat je die dag hebt gedaan. Dat
+maakt het invullen van je registratie een korte dagelijkse bevestiging in plaats
+van een klus.
 
-| Command | Purpose |
+| Commando | Waarvoor |
 | :-- | :-- |
-| `/wbso:init` | Set up a project: period, hours applied for, rate, S&O projects, and the exclusion list |
-| `/wbso:dag` | Daily entry — proposes bookings from your commits, you confirm |
-| `/wbso:check` | Validation and totals, including the ten-working-day rule |
-| `/wbso:mededeling` | The March report to RVO, plus a CSV export for your accountant |
+| `/wbso:init` | Project opzetten: periode, aangevraagde uren, tarief, S&O-projecten en de afbakeningslijst |
+| `/wbso:dag` | Dagboeking — stelt boekingen voor uit je commits, jij bevestigt |
+| `/wbso:check` | Validatie en totalen, inclusief de tien-werkdagenregel |
+| `/wbso:mededeling` | Het maartrapport voor RVO, plus een CSV-export voor je boekhouder |
 
-## The design principle
+## Het ontwerpprincipe
 
-**The machine proposes, you declare.**
+**De machine stelt voor, jij verklaart.**
 
-Hours are never booked automatically. Session duration is not R&D time: it
-includes breaks, includes non-qualifying work, and misses the thinking that
-happens away from the editor. A tool that silently records session time as S&O
-hours doesn't produce a record — it produces a liability during an RVO audit.
+Uren worden nooit automatisch geboekt. Sessieduur is geen S&O-tijd: hij bevat
+pauzes, bevat werk dat niet kwalificeert, en mist het denkwerk dat buiten de
+editor gebeurt. Een tool die stilzwijgend sessietijd wegschrijft als S&O-uren
+levert geen registratie op maar een aansprakelijkheidsrisico bij een controle.
 
-So the plugin only ever drafts, and you confirm or correct. Observations (what
-the machine saw) and claims (what you declared) are kept in separate files, and
-the ledger is append-only: a correction is a new entry referencing the old one,
-never an edit. Overwriting entries would erase the very evidence the scheme asks
-you to keep.
+De plugin doet daarom nooit meer dan een concept voorstellen dat jij bevestigt of
+corrigeert. Waarnemingen (wat de machine zag) en claims (wat jij hebt verklaard)
+staan in gescheiden bestanden, en het grootboek is append-only: een correctie is
+een nieuwe regel die naar de oude verwijst, nooit een bewerking. Regels
+overschrijven zou juist het bewijs wissen dat de regeling van je vraagt.
 
-## Language
+Zie [ADR-01](docs/adr/ADR-01-registratie-integriteit.md) en
+[ADR-02](docs/adr/ADR-02-machine-stelt-voor.md).
 
-Code, docs and plugin metadata are in English. The commands themselves speak
-Dutch and use RVO terminology verbatim (*mededeling*, *S&O-verklaring*,
-*afdrachtvermindering*), because those terms have no good English equivalents and
-you need them to match the eLoket form.
+## Taal
+
+Alles in het Nederlands: documentatie, code, commando's en commit-berichten. De
+WBSO is een Nederlandse regeling en het publiek is dat dus ook. RVO-terminologie
+wordt letterlijk gebruikt, zodat de begrippen aansluiten op het eLoket-formulier.
+Zie [ADR-04](docs/adr/ADR-04-distributie-en-taal.md).
 
 ## Disclaimer
 
-This is a tool for keeping your own records. It is **not tax advice**. What you
-submit to RVO, and whether the hours you record are truthful and qualify as S&O,
-remains entirely your responsibility. Consult your accountant or an RVO adviser
-if you are unsure.
+Dit is gereedschap voor je eigen administratie. Het is **geen fiscaal advies**.
+Wat je bij RVO indient, en of de uren die je registreert waarheidsgetrouw zijn en
+als S&O kwalificeren, blijft volledig je eigen verantwoordelijkheid. Twijfel je,
+raadpleeg dan je boekhouder of een WBSO-adviseur.
 
-## License
+## Licentie
 
 MIT
