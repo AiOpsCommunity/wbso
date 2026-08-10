@@ -3,7 +3,7 @@
 
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
@@ -36,6 +36,48 @@ function draai(map, args, invoer) {
     return { code: fout.status, uit: fout.stdout ?? "", fouttekst: fout.stderr ?? "" };
   }
 }
+
+test("projectwortel werkt zonder bestaande configuratie", (t) => {
+  const map = mkdtempSync(join(tmpdir(), "wbso-nieuw-"));
+  mkdirSync(join(map, ".git"));
+  t.after(() => rmSync(map, { recursive: true, force: true }));
+
+  const { code, uit } = draai(map, ["projectwortel"]);
+  assert.equal(code, 0);
+
+  const uitslag = JSON.parse(uit);
+  assert.equal(uitslag.locaties.meegecommit, join(uitslag.projectwortel, ".wbso"));
+  assert.match(uitslag.locaties.buiten, /\.wbso\//);
+});
+
+test("valideer-config keurt een geldige configuratie goed zonder te schrijven", (t) => {
+  const map = mkdtempSync(join(tmpdir(), "wbso-nieuw-"));
+  mkdirSync(join(map, ".git"));
+  t.after(() => rmSync(map, { recursive: true, force: true }));
+
+  const { code, uit } = draai(map, ["valideer-config"], JSON.stringify(maakConfig()));
+  assert.equal(code, 0);
+  assert.equal(JSON.parse(uit).geldig, true);
+  assert.equal(
+    existsSync(join(map, ".wbso", "config.json")),
+    false,
+    "valideren mag niets wegschrijven — dat doet de skill zelf",
+  );
+});
+
+test("valideer-config wijst een lege afbakening af", (t) => {
+  const map = mkdtempSync(join(tmpdir(), "wbso-nieuw-"));
+  mkdirSync(join(map, ".git"));
+  t.after(() => rmSync(map, { recursive: true, force: true }));
+
+  const { code, fouttekst } = draai(
+    map,
+    ["valideer-config"],
+    JSON.stringify(maakConfig({ afbakening: [] })),
+  );
+  assert.equal(code, 1);
+  assert.match(JSON.parse(fouttekst).fout, /afbakening/);
+});
 
 test("wortel toont de opgeloste opslagwortel", (t) => {
   const { map, opruimen } = project();

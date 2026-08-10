@@ -6,7 +6,15 @@
 // en niet in een skilltekst — een taalmodel is geen betrouwbare optelmachine,
 // en de tien-werkdagengrens moet exact zijn.
 
-import { ConfigFout, bepaalWortel, leesConfig } from "../src/config.mjs";
+import { homedir } from "node:os";
+import { basename, join } from "node:path";
+import {
+  ConfigFout,
+  bepaalWortel,
+  leesConfig,
+  valideerConfig,
+  vindProjectwortel,
+} from "../src/config.mjs";
 import { BoekingFout, effectieveBoekingen, leesRegels, voegToe } from "../src/grootboek.mjs";
 import { naarCsv, totalenVan } from "../src/totalen.mjs";
 import { valideerGrootboek } from "../src/validatie.mjs";
@@ -14,6 +22,8 @@ import { valideerGrootboek } from "../src/validatie.mjs";
 const GEBRUIK = `Gebruik: wbso <commando> [opties]
 
 Commando's:
+  projectwortel       Toon de projectwortel en de mogelijke opslaglocaties
+  valideer-config     Valideer een configuratie (JSON op stdin), zonder te schrijven
   wortel              Toon de opgeloste opslagwortel
   config              Toon de gevalideerde configuratie
   toevoegen           Voeg een boeking toe (JSON op stdin)
@@ -61,6 +71,27 @@ async function main() {
   }
 
   const opties = leesOpties(rest);
+
+  // Deze twee draaien vóór er een .wbso/ bestaat — /wbso:init leunt erop.
+  if (commando === "projectwortel") {
+    const projectwortel = vindProjectwortel(opties.cwd);
+    toon({
+      projectwortel,
+      locaties: {
+        meegecommit: join(projectwortel, ".wbso"),
+        lokaal: join(projectwortel, ".wbso"),
+        buiten: join(homedir(), ".wbso", basename(projectwortel)),
+      },
+    });
+    return 0;
+  }
+
+  if (commando === "valideer-config") {
+    valideerConfig(await leesStdin());
+    toon({ geldig: true });
+    return 0;
+  }
+
   const { wortel, projectwortel, extern } = bepaalWortel(opties.cwd);
 
   if (commando === "wortel") {

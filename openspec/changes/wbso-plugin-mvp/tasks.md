@@ -31,22 +31,22 @@
 
 ## 4. Skill `/wbso:init`
 
-- [ ] 4.1 Skillstructuur `skills/init/SKILL.md`, Nederlandstalige interactie
-- [ ] 4.2 De vijf kernvragen; opslaglocatie met uitleg wat `lokaal` en `buiten` aan bewijskracht opgeven
-- [ ] 4.3 Projecten voorstellen uit ADR's, README, `docs/` en recente commits, met terugval als die ontbreken
-- [ ] 4.4 Afbakening voorstellen uit gedetecteerde mappen, met reden per vermelding; lege afbakening weigeren
-- [ ] 4.5 `verklaringnummer` leeg laten; `/wbso:init <jaar>` voegt een aanvraagblok toe zonder bestaande jaren te raken
-- [ ] 4.6 Bij `lokaal`: `.gitignore`-regel toevoegen
+- [x] 4.1 Skillstructuur `skills/init/SKILL.md`, Nederlandstalige interactie
+- [x] 4.2 De vijf kernvragen; opslaglocatie met uitleg wat `lokaal` en `buiten` aan bewijskracht opgeven
+- [x] 4.3 Projecten voorstellen uit ADR's, README, `docs/` en recente commits, met terugval als die ontbreken
+- [x] 4.4 Afbakening voorstellen uit gedetecteerde mappen, met reden per vermelding; lege afbakening weigeren
+- [x] 4.5 `verklaringnummer` leeg laten; `/wbso:init <jaar>` voegt een aanvraagblok toe zonder bestaande jaren te raken
+- [x] 4.6 Bij `lokaal`: `.gitignore`-regel toevoegen
 
 ## 5. Skill `/wbso:dag`
 
-- [ ] 5.1 Skillstructuur, optionele datum als argument
-- [ ] 5.2 Commits van de dag ophalen en groeperen tot samenhangende brokken werk
-- [ ] 5.3 Boekingen voorstellen met uren, project, soort en omschrijving; uren expliciet benoemen als startpunt, niet als meting
-- [ ] 5.4 Afbakeningslijst tonen bij het voorstel; matchend werk aanbieden als `overig` met reden, overrulebaar
-- [ ] 5.5 Terugval zonder commits: rechtstreeks uitvragen, niets verzinnen
-- [ ] 5.6 Pas na expliciete bevestiging `append` aanroepen; afbreken laat het grootboek ongemoeid
-- [ ] 5.7 Corrigeren van een eerdere boeking vanuit dezelfde skill
+- [x] 5.1 Skillstructuur, optionele datum als argument
+- [x] 5.2 Commits van de dag ophalen en groeperen tot samenhangende brokken werk
+- [x] 5.3 Boekingen voorstellen met uren, project, soort en omschrijving; uren expliciet benoemen als startpunt, niet als meting
+- [x] 5.4 Afbakeningslijst tonen bij het voorstel; matchend werk aanbieden als `overig` met reden, overrulebaar
+- [x] 5.5 Terugval zonder commits: rechtstreeks uitvragen, niets verzinnen
+- [x] 5.6 Pas na expliciete bevestiging `append` aanroepen; afbreken laat het grootboek ongemoeid
+- [x] 5.7 Corrigeren van een eerdere boeking vanuit dezelfde skill
 
 ## 6. Skills `/wbso:check` en `/wbso:mededeling`
 
