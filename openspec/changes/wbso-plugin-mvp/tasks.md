@@ -50,18 +50,18 @@
 
 ## 6. Skills `/wbso:check` en `/wbso:mededeling`
 
-- [ ] 6.1 `/wbso:check`: `validate` en `totals` aanroepen en in Nederlands proza presenteren
-- [ ] 6.2 Herinnering aan een ontbrekend `verklaringnummer`
-- [ ] 6.3 `/wbso:mededeling <jaar>`: jaartotalen per project, overzicht van wat in het eLoket moet, CSV-export
-- [ ] 6.4 Waarschuwing bij afwijking tussen gerealiseerde en aangevraagde uren, met het gevolg erbij
-- [ ] 6.5 Rapport weigeren zolang er validatiefouten openstaan
+- [x] 6.1 `/wbso:check`: `validate` en `totals` aanroepen en in Nederlands proza presenteren
+- [x] 6.2 Herinnering aan een ontbrekend `verklaringnummer`
+- [x] 6.3 `/wbso:mededeling <jaar>`: jaartotalen per project, overzicht van wat in het eLoket moet, CSV-export
+- [x] 6.4 Waarschuwing bij afwijking tussen gerealiseerde en aangevraagde uren, met het gevolg erbij
+- [x] 6.5 Rapport weigeren zolang er validatiefouten openstaan
 
 ## 7. Sessie-hook
 
-- [ ] 7.1 `hooks/session.mjs`: config lezen, direct stoppen als `capture.sessies` uitstaat of config ontbreekt
-- [ ] 7.2 `hooks/hooks.json` met `SessionStart` en `SessionEnd`
-- [ ] 7.3 Eén regel per gebeurtenis naar `sessies-<jaar>.jsonl`
-- [ ] 7.4 Test dat de hook geen enkele verwijzing naar het grootboek bevat
+- [x] 7.1 `hooks/session.mjs`: config lezen, direct stoppen als `capture.sessies` uitstaat of config ontbreekt
+- [x] 7.2 `hooks/hooks.json` met `SessionStart` en `SessionEnd`
+- [x] 7.3 Eén regel per gebeurtenis naar `sessies-<jaar>.jsonl`
+- [x] 7.4 Test dat de hook geen enkele verwijzing naar het grootboek bevat
 
 ## 8. Plugin-manifest en publicatie
 

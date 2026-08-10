@@ -16,6 +16,7 @@ import {
   vindProjectwortel,
 } from "../src/config.mjs";
 import { BoekingFout, effectieveBoekingen, leesRegels, voegToe } from "../src/grootboek.mjs";
+import { stelMededelingSamen } from "../src/mededeling.mjs";
 import { naarCsv, totalenVan } from "../src/totalen.mjs";
 import { valideerGrootboek } from "../src/validatie.mjs";
 
@@ -29,6 +30,7 @@ Commando's:
   toevoegen           Voeg een boeking toe (JSON op stdin)
   valideer            Valideer het grootboek; exitcode 1 bij fouten
   totalen             Totalen per maand en per project
+  mededeling          Jaaroverzicht voor RVO; exitcode 1 zolang er fouten zijn
   export              CSV van de effectieve boekingen naar stdout
 
 Opties:
@@ -121,6 +123,12 @@ async function main() {
     case "totalen":
       toon(totalenVan(wortel, opties.jaar, config));
       return 0;
+
+    case "mededeling": {
+      const rapport = stelMededelingSamen(wortel, opties.jaar, config);
+      toon(rapport);
+      return rapport.gereed ? 0 : 1;
+    }
 
     case "export":
       process.stdout.write(naarCsv(effectieveBoekingen(leesRegels(wortel, opties.jaar))));

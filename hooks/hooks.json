@@ -1,0 +1,26 @@
+{
+  "description": "Sessie-capture voor de WBSO-urenregistratie — alleen actief als capture.sessies aanstaat",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/session.mjs\""
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/session.mjs\""
+          }
+        ]
+      }
+    ]
+  }
+}
